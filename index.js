@@ -2,50 +2,6 @@ let toWatchList = document.getElementById('to-watch-list')
 let input = document.getElementById('new-show-title')
 let form = document.getElementById('form')
 
-form.addEventListener('submit', async (e) => {
-    e.preventDefault()
-    let li = document.createElement('li')
-    let img = document.createElement('img')
-    let data = await getShow(input.value)
-    let summary = document.createElement('p')
-    let genre = document.createElement('p')
-    let hiddenDiv = document.createElement('div')
-    
-    li.textContent = data.name
-    img.src = data.image.medium
-    // if (data.genres = "") {
-    //         genre.textContent = "Genre: ??"
-    //     } else {
-            genre.textContent = (' Genre: ' + data.genres)
-            // }
-            
-    hiddenDiv.className = 'hidden'
-    hiddenDiv.innerHTML = data.summary
-    summary.textContent = data.summary
-    
-    // Add image to Watchlist items
-    li.prepend(img)
-    img.style.height = '150px'
-    toWatchList.append(li)
-    li.append(hiddenDiv)
-    li.append(genre)
-    
-    // Delete Button
-    let deleteBtn = document.createElement('button')
-    deleteBtn.textContent = "delete"
-    deleteBtn.className = "deleteBtn"
-    genre.prepend(deleteBtn)
-    deleteBtn.addEventListener('click', () => {
-        li.remove()
-    })
-    
-    // Click Image to Toggle Summary
-    img.addEventListener('click', () => {
-        hiddenDiv.classList.toggle('hidden')
-    })
-})
-
-
 const getShow = async (str) => {
     let req = await fetch(`https://api.tvmaze.com/singlesearch/shows?q=${str}`)
     let res = await req.json()
@@ -53,6 +9,89 @@ const getShow = async (str) => {
     input.value = ""
     return res
 }
+
+form.addEventListener('submit', async (e) => {
+    e.preventDefault()
+    // console.log('submitted!')
+    let showName = document.createElement('h3')
+    let img = document.createElement('img')
+    let showSummary = document.createElement('p')
+    let showGenre = document.createElement('p')
+    let showType = document.createElement('p')
+    let hiddenDiv = document.createElement('div')
+    let showCard = document.createElement('div')
+        showCard.setAttribute("id", "showCard")
+    let leftDiv = document.createElement('div')
+        leftDiv.className = "leftDiv"
+    let rightDiv = document.createElement('div')
+        rightDiv.className = "rightDiv"
+    let invisibleDiv = document.createElement('div')
+        invisibleDiv.className = "invisibleDiv"
+    let data = await getShow(input.value)
+    let box = document.getElementById('box')
+    box.append(showCard)
+
+    hiddenDiv.className = 'hidden'
+    hiddenDiv.classList.add = "hiddenDiv"
+    hiddenDiv.innerHTML = data.summary
+    showSummary.textContent = data.summary
+    
+    showName.innerText = data.name
+    showType.innerText = (data.type)
+    showGenre.innerText = data.genres
+    
+    img.src = data.image.medium
+    img.style.height = '150px'
+    
+    rightDiv.append(showName)
+    rightDiv.append(showType)
+    rightDiv.append(showGenre)
+    
+    // Delete Button
+    let deleteBtn = document.createElement('button')
+    deleteBtn.textContent = "X"
+    deleteBtn.className = "deleteBtn"
+    deleteBtn.addEventListener('click', () => {
+         showCard.remove()
+    })
+    leftDiv.append(deleteBtn)
+    leftDiv.append(img)
+
+    showCard.append(leftDiv)
+    showCard.append(rightDiv)
+    showCard.append(invisibleDiv)
+
+
+    
+    // li.textContent = data.name
+    // if (data.genres = "") {
+    //         genre.textContent = "Genre: ??"
+    //     } else {
+            // genre.textContent = (' Genre: ' + data.genres)
+            // }
+            
+    
+    
+    // Add image to Watchlist items
+    // li.prepend(img)
+    
+    // toWatchList.append(li)
+    // li.append(hiddenDiv)
+    // li.append(genre)
+    
+    
+    // Click Image to Toggle Summary
+    img.addEventListener('click', () => {
+        hiddenDiv.classList.toggle('hidden')
+        hiddenDiv.style.position = "absolute"
+        hiddenDiv.style.float = "right"
+        invisibleDiv.append(hiddenDiv)
+        // hiddenDiv.style.float = "right"
+    })
+})
+
+
+
 
 
 // let upBtn = document.createElement('button')
